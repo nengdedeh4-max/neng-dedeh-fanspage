@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Neng Dedeh Fanspage</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome (Ikon) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Swiper CSS (Untuk Slider) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+
+    <style>
+        /* --- CSS VARIABLES (Tema Warna) --- */
+        :root {
+            --bg-color: #fff0f5; /* Lavender Blush */
+            --text-color: #333;
+            --primary-color: #ff69b4; /* Hot Pink */
+            --secondary-color: #ff1493; /* Deep Pink */
+            --header-bg: rgba(255, 240, 245, 0.9);
+            /* Gradient diperluas untuk efek animasi */
+            --btn-bg: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #ff9a9e 100%);
+            --btn-text: #fff;
+        }
+
+        /* Mode Gelap */
+        body.dark-mode {
+            --bg-color: #1a0b14; 
+            --text-color: #fce4ec;
+            --header-bg: rgba(26, 11, 20, 0.9);
+            /* Gradient diperluas untuk efek animasi mode gelap */
+            --btn-bg: linear-gradient(135deg, #880e4f 0%, #4a148c 50%, #880e4f 100%);
+        }
+
+        /* --- RESET & BASIC --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.4s ease, color 0.4s ease;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* --- LOADING SCREEN --- */
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: #fff0f5; /* Warna dasar pink terang */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+
+        body.dark-mode #loader {
+            background: #1a0b14; /* Menyesuaikan jika mode gelap */
+        }
+
+        #loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .heart-loader {
+            font-size: 50px;
+            color: #ff1493;
+            animation: heartbeat 1.2s infinite ease-in-out;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 15px rgba(255, 20, 147, 0.6));
+        }
+
+        .loader-text {
+            font-size: 16px;
+            font-weight: 600;
+            color: #ff1493;
+            letter-spacing: 2px;
+            animation: pulseText 1.5s infinite alternate;
+        }
+
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            14% { transform: scale(1.2); }
+            28% { transform: scale(1); }
+            42% { transform: scale(1.2); }
+            70% { transform: scale(1); }
+        }
+
+        @keyframes pulseText {
+            0% { opacity: 0.6; }
+            100% { opacity: 1; }
+        }
+
+        /* --- HEADER --- */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            background: var(--header-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 15px;
+            z-index: 1000;
+        }
+
+        /* Garis Tiga (Hamburger) */
+        .hamburger {
+            font-size: 24px;
+            color: var(--primary-color);
+            cursor: pointer;
+            z-index: 1001;
+            padding: 10px; /* Area klik lebih luas */
+        }
+
+        /* Animasi Teks Tengah */
+        .brand-title {
+            font-size: clamp(14px, 4vw, 18px); 
+            font-weight: 800;
+            font-style: italic;
+            text-align: center;
+            background: linear-gradient(90deg, #ff1493, #ff69b4, #ff1493);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 3s linear infinite;
+            will-change: background-position;
+            padding: 5px 10px; 
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 65%;
+        }
+
+        @keyframes shine {
+            to { background-position: 200% center; }
+        }
+
+        /* Profil Kanan Atas */
+        .profile-container {
+            position: relative;
+            padding: 5px;
+        }
+
+        .profile-pic {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary-color);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            display: block;
+        }
+
+        .profile-pic:hover {
+            transform: scale(1.05);
+        }
+
+        /* Popup Sosmed (TikTok) */
+        .social-popup {
+            position: absolute;
+            top: 55px;
+            right: 0;
+            background: var(--header-bg);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            padding: 10px;
+            border-radius: 12px;
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            border: 1px solid rgba(255, 105, 180, 0.3);
+            min-width: 130px;
+        }
+
+        .social-popup.active {
+            display: flex;
+            animation: fadeInDown 0.3s ease;
+        }
+
+        .social-popup a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+
+        .social-popup a:hover {
+            background: rgba(255, 105, 180, 0.2);
+        }
+
+        /* --- SIDEBAR MENU (KIRI) --- */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 260px;
+            height: 100vh;
+            background: var(--header-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 1002;
+            padding: 80px 20px 20px;
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .sidebar.open {
+            left: 0;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .sidebar-menu li button, .sidebar-menu li a {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            background: rgba(255, 105, 180, 0.1);
+            color: var(--text-color);
+            font-size: 15px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .sidebar-menu li button:hover, .sidebar-menu li a:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.4);
+            z-index: 1001;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .overlay.active {
+            display: block;
+            opacity: 1;
+        }
+
+        /* --- MAIN CONTENT --- */
+        main {
+            padding: 85px 15px 40px;
+            width: 100%;
+            max-width: 480px; 
+            margin: 0 auto;
+        }
+
+        /* Swiper Slider */
+        .swiper {
+            width: 100%;
+            height: 200px;
+            margin-bottom: 25px;
+            border-radius: 15px; 
+        }
+
+        .swiper-slide {
+            background: #eee;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .swiper-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Mempercantik titik navigasi slider */
+        .swiper-pagination-bullet-active {
+            background-color: var(--primary-color) !important;
+        }
+
+        /* Tombol Menu Besar */
+        .menu-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 18px;
+            border-radius: 12px;
+            background: var(--btn-bg);
+            background-size: 200% auto; /* Ukuran background lebih besar untuk animasi */
+            color: var(--btn-text);
+            text-align: center;
+            font-size: 18px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-decoration: none;
+            display: block;
+            cursor: pointer;
+            border: none;
+            
+            /* Menambahkan animasi gradient bergerak */
+            animation: gradientMove 4s ease infinite;
+            /* Mempertahankan animasi transisi saat ditekan (scale) */
+            transition: transform 0.2s ease, filter 0.2s ease;
+        }
+
+        /* Efek saat tombol di hover / ditekan */
+        .btn-primary:hover, .btn-primary:active {
+            transform: scale(0.97); /* Animasi mengecil saat ditekan */
+            filter: brightness(1.1); /* Sedikit lebih terang */
+        }
+
+        /* Keyframes untuk animasi gradient */
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- LOADING SCREEN -->
+    <div id="loader">
+        <i class="fa-solid fa-heart heart-loader"></i>
+        <div class="loader-text">Loading...</div>
+    </div>
+
+    <!-- Overlay untuk Sidebar -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Header -->
+    <header>
+        <i class="fa-solid fa-bars hamburger" id="hamburger"></i>
+        
+        <div class="brand-title">NENG DEDEH FANSPAGE</div>
+        
+        <div class="profile-container">
+            <!-- URL PROFIL TETAP SEPERTI YANG ANDA BUAT -->
+            <img src="https://i.ibb.co/3s3s3s3/default-profile.jpg" alt="Profile" class="profile-pic" id="profilePic">
+            
+            <!-- Popup Menu Sosmed -->
+            <div class="social-popup" id="socialPopup">
+                <a href="https://tiktok.com/@sucipermatadewi53" target="_blank">
+                    <i class="fa-brands fa-tiktok" style="color: #333; font-size: 16px;"></i> TikTok: neng dedeh
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sidebar Menu Kiri -->
+    <div class="sidebar" id="sidebar">
+        <ul class="sidebar-menu">
+            <li>
+                <button id="themeToggle">
+                    <i class="fa-solid fa-moon"></i> <span>Mode Gelap</span>
+                </button>
+            </li>
+            <li>
+                <!-- NOMOR WA TETAP SEPERTI YANG ANDA BUAT -->
+                <a href="https://wa.me/6281221548310?text=Halo%20saya%20ingin%20beli%20website" target="_blank">
+                    <i class="fa-solid fa-cart-shopping"></i> Beli Website
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Konten Utama -->
+    <main>
+        <!-- Slider Foto (5 Foto) -->
+        <div class="swiper mySwiper">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide"><img src="https://images.unsplash.com/photo-1618932260643-eee4a2f652a6?q=80&w=600&auto=format&fit=crop" alt="Foto 1"></div>
+                <div class="swiper-slide"><img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?q=80&w=600&auto=format&fit=crop" alt="Foto 2"></div>
+                <div class="swiper-slide"><img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=600&auto=format&fit=crop" alt="Foto 3"></div>
+                <div class="swiper-slide"><img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=600&auto=format&fit=crop" alt="Foto 4"></div>
+                <div class="swiper-slide"><img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=600&auto=format&fit=crop" alt="Foto 5"></div>
+            </div>
+            <!-- Titik Navigasi -->
+            <div class="swiper-pagination"></div>
+        </div>
+
+        <!-- Tombol Menu Utama (Dengan 2 Menu Baru) -->
+        <div class="menu-buttons">
+            <a href="#" class="btn-primary" onclick="actionBtn('Sawer')">
+                SAWER
+            </a>
+            <a href="#" class="btn-primary" onclick="actionBtn('No WA')">
+                NO WA
+            </a>
+            <a href="#" class="btn-primary" onclick="actionBtn('Video Call')">
+                VIDEO CALL
+            </a>
+            <a href="#" class="btn-primary" onclick="actionBtn('Photo/Video Pribadi')">
+                PHOTO/VIDEO PRIBADI
+            </a>
+            <!-- 2 Menu Baru di Bawah -->
+            <a href="#" class="btn-primary" onclick="actionBtn('Collab Video TikTok')">
+                COLLAB VIDEO TIKTOK
+            </a>
+            <a href="#" class="btn-primary" onclick="actionBtn('Collab Live TikTok')">
+                COLLAB LIVE TIKTOK
+            </a>
+        </div>
+    </main>
+
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+
+    <script>
+        // --- 0. LOGIKA LOADING SCREEN ---
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loader');
+            setTimeout(() => {
+                loader.classList.add('hidden');
+            }, 800);
+        });
+
+        // --- 1. INISIALISASI SLIDER (SWIPER) ---
+        var swiper = new Swiper(".mySwiper", {
+            slidesPerView: 1.15, 
+            spaceBetween: 15,
+            centeredSlides: true,
+            loop: true,
+            speed: 600, 
+            autoplay: {
+                delay: 3000, 
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+            },
+            grabCursor: true,
+        });
+
+        // --- 2. LOGIKA MENU HAMBURGER & SIDEBAR ---
+        const hamburger = document.getElementById('hamburger');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+
+        hamburger.addEventListener('click', () => {
+            sidebar.classList.add('open');
+            overlay.classList.add('active');
+        });
+
+        overlay.addEventListener('click', () => {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+            document.getElementById('socialPopup').classList.remove('active');
+        });
+
+        // --- 3. LOGIKA PROFIL & POPUP TIKTOK ---
+        const profilePic = document.getElementById('profilePic');
+        const socialPopup = document.getElementById('socialPopup');
+
+        profilePic.addEventListener('click', (e) => {
+            e.stopPropagation(); 
+            socialPopup.classList.toggle('active');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!profilePic.contains(e.target) && !socialPopup.contains(e.target)) {
+                socialPopup.classList.remove('active');
+            }
+        });
+
+        // --- 4. LOGIKA DARK/LIGHT MODE ---
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = themeToggle.querySelector('i');
+        const themeText = themeToggle.querySelector('span');
+        const body = document.body;
+
+        if (localStorage.getItem('theme') === 'dark') {
+            body.classList.add('dark-mode');
+            themeIcon.classList.replace('fa-moon', 'fa-sun');
+            themeText.innerText = 'Mode Cerah';
+        }
+
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            
+            if (body.classList.contains('dark-mode')) {
+                themeIcon.classList.replace('fa-moon', 'fa-sun');
+                themeText.innerText = 'Mode Cerah';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                themeIcon.classList.replace('fa-sun', 'fa-moon');
+                themeText.innerText = 'Mode Gelap';
+                localStorage.setItem('theme', 'light');
+            }
+        });
+
+        // --- 5. FUNGSI SEMENTARA UNTUK TOMBOL ---
+        function actionBtn(menuName) {
+            alert(`Tombol ${menuName} akan segera berfungsi!`);
+        }
+    </script>
+</body>
+</html>
